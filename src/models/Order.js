@@ -23,7 +23,6 @@ const produtosSchema = new Schema({
   quantidade: Number,
   valor: Number,
   adicionais: [adicionaisSchema],
-  archived: { type: Boolean, default: false },
 })
 
 const orderSchema = new Schema(
@@ -34,6 +33,7 @@ const orderSchema = new Schema(
     entrega: Number,
     produtos: [produtosSchema],
     total: Number,
+    archived: { type: Boolean, default: false },
   },
   { timestamps: true }
 )
