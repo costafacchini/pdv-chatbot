@@ -2,34 +2,31 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const ObjectId = Schema.ObjectId
 
-const atributosSchema = new Schema({
-  index: Number,
+const valoresSchema = new Schema({
   nome: String,
   quantidade: Number,
   valor: Number,
 })
 
-const adicionaisSchema = new Schema({
-  index: Number,
+const atributosSchema = new Schema({
   nome: String,
   quantidade: Number,
   valor: Number,
-  atributos: atributosSchema,
+  valores: valoresSchema,
 })
 
 const produtosSchema = new Schema({
-  index: Number,
   nome: String,
   quantidade: Number,
   valor: Number,
-  adicionais: [adicionaisSchema],
+  atributos: [atributosSchema],
 })
 
 const orderSchema = new Schema(
   {
     _id: ObjectId,
     loja: String,
-    cliente: String,
+    cliente_id: String,
     entrega: Number,
     produtos: [produtosSchema],
     total: Number,

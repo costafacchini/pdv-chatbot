@@ -3,26 +3,24 @@ const Order = require('../models/Order')
 module.exports = class ItemsController {
 
   async create(req, res) {
-    const order = await Order.findOne({ loja: req.body.loja.toString(), cliente: req.body.cliente, archived: false })
+    const order = await Order.findOne({ loja: req.body.loja.toString(), cliente_id: req.body.cliente_id.toString(), archived: false })
 
     if (order) {
       req.body.produtos?.forEach((produto) => {
-        const adicionais = produto.adicionais?.map((adicional, indexAdicional) => {
+        const atributos = produto.atributos?.map((atributo) => {
           return {
-            index: indexAdicional,
-            nome: adicional.nome,
-            quantidade: adicional.quantidade,
-            valor: adicional.valor,
-            atributos: adicional.atributos,
+            nome: atributo.nome,
+            quantidade: atributo.quantidade,
+            valor: atributo.valor,
+            valores: atributo.valores,
           }
         })
 
         order.produtos.push({
-          index: order.produtos.length,
           nome: produto.nome,
           quantidade: produto.quantidade,
           valor: produto.valor,
-          adicionais
+          atributos
         })
       })
 
@@ -33,16 +31,14 @@ module.exports = class ItemsController {
   }
 
   async delete(req, res) {
-    const order = await Order.findOne({ loja: req.body.loja.toString(), cliente: req.body.cliente, archived: false })
+    const order = await Order.findOne({ loja: req.body.loja.toString(), cliente_id: req.body.cliente_id.toString(), archived: false })
 
     if (order) {
-      const produto = order.produtos.filter((produto) => {
-        return produto.index === req.body.item
-      })
+      const produto = order.produtos[req.body.item - 1]
 
       console.log(produto)
 
-      produto[0].remove()
+      produto.remove()
 
       await order.save()
     }
